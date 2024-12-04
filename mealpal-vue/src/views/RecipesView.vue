@@ -170,6 +170,7 @@ export default {
       console.error("Error loading recipes:", error);
     }
   },
+
   computed: {
     uniqueCategories() {
       if (!this.recipes.length) return [];
@@ -177,59 +178,68 @@ export default {
     },
     filteredRecipes() {
       return this.recipes.filter((recipe) => {
-        const matchesSearch = !this.searchQuery || recipe.name.toLowerCase().includes(this.searchQuery.toLowerCase());
-        const matchesCategory = !this.selectedCategory || recipe.category === this.selectedCategory;
+        const matchesSearch =
+          !this.searchQuery ||
+          recipe.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+        const matchesCategory =
+          !this.selectedCategory || recipe.category === this.selectedCategory;
         return matchesSearch && matchesCategory;
       });
     },
   },
+
   methods: {
     handleSearch() {
       console.log("Search initiated for:", this.searchQuery);
     },
+
     openAddRecipeModal() {
       this.isModalOpen = true;
     },
+
     closeModal() {
       this.isModalOpen = false;
+      this.resetNewRecipe();
     },
+
     addIngredient() {
       this.newRecipe.ingredients.push({ name: "", quantity: 0, unit: "" });
     },
+
     removeIngredient(index) {
       this.newRecipe.ingredients.splice(index, 1);
     },
-    addNewRecipe() {
-      // Add the new recipe to the recipes array
-      this.recipes.push({ ...this.newRecipe });
 
-      console.log("Recipe added successfully:", this.newRecipe);
+    handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.newRecipe.picture = e.target.result; // Save the base64 image URL
+        };
+        reader.readAsDataURL(file);
+      }
+    },
+
+    addNewRecipe() {
+      const newRecipe = { ...this.newRecipe }; // Clone the recipe
+
+      // Add to the recipes array
+      this.recipes.push(newRecipe);
 
       // Save the updated recipes to a JSON file
       this.saveToJSON();
 
-      // Close the modal
+      // Close the modal and reset the new recipe
       this.closeModal();
     },
 
     saveToJSON() {
-      const updatedRecipes = [
-        ...this.recipes, // Existing recipes
-        {
-          name: this.newRecipe.name,
-          category: this.newRecipe.category,
-          servings: this.newRecipe.servings,
-          ingredients: this.newRecipe.ingredients,
-          instructions: this.newRecipe.instructions,
-          picture: this.newRecipe.picture, // Save the path to the image
-        },
-      ];
-
-      // Create a JSON Blob and trigger download
-      const blob = new Blob([JSON.stringify(updatedRecipes, null, 2)], {
-        type: "application/json",
-      });
+      const dataStr = JSON.stringify(this.recipes, null, 2);
+      const blob = new Blob([dataStr], { type: "application/json" });
       const url = URL.createObjectURL(blob);
+
+      // Trigger download
       const a = document.createElement("a");
       a.href = url;
       a.download = "recipes.json";
@@ -238,11 +248,8 @@ export default {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      this.resetNewRecipe();
-
       console.log("JSON file saved successfully!");
     },
-
 
     resetNewRecipe() {
       this.newRecipe = {
@@ -251,12 +258,13 @@ export default {
         servings: 1,
         ingredients: [],
         instructions: "",
-        picture: "",
+        picture: null,
       };
     },
   },
 };
 </script>
+
 
 
 <style scoped>
