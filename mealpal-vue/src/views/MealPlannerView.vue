@@ -5,6 +5,7 @@
     <!-- Reset Button Container -->
     <div class="reset-button-container">
       <button class="reset-button" @click="resetWeek">Reset Week</button>
+      <button class="save-button" @click="saveToJSON">Save Week</button>
     </div>
 
     <div class="week-grid">
@@ -41,7 +42,7 @@
 
 <script>
 export default {
-  data() {  
+  data() {
     return {
       weekDays: [], // Start with an empty array
       recipes: [], // List of all recipes from recipes.json
@@ -53,12 +54,10 @@ export default {
     };
   },
   async created() {
-    // Load saved data from localStorage or default to predefined structure
     const savedWeekPlan = localStorage.getItem("weekDays");
     if (savedWeekPlan) {
       this.weekDays = JSON.parse(savedWeekPlan);
     } else {
-      // Fallback to default if no saved data exists
       this.weekDays = [
         { name: "Monday", meals: [] },
         { name: "Tuesday", meals: [] },
@@ -70,12 +69,10 @@ export default {
       ];
     }
 
-    // Load recipes
     const response = await fetch("/recipes.json");
     this.recipes = await response.json();
   },
   watch: {
-    // Watch for changes in weekDays and save to localStorage
     weekDays: {
       deep: true,
       handler(newWeekDays) {
@@ -106,15 +103,23 @@ export default {
     },
     resetWeek() {
       this.weekDays.forEach((day) => {
-        day.meals.forEach((meal) => {
-          meal.recipe = null;
-        });
+        day.meals = [];
       });
+    },
+    saveToJSON() {
+      const blob = new Blob([JSON.stringify(this.weekDays, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "week_plan.json";
+      a.click();
+      URL.revokeObjectURL(url);
     },
   },
 };
 </script>
-
 
 <style scoped>
 .meal-planner {
@@ -290,6 +295,22 @@ select option:checked {
   display: flex;
   justify-content: flex-start; /* Align button to the left */
   margin-bottom: 1rem;
+}
+
+/* Save Button Styling */
+.save-button {
+  background-color: #28a745; /* Green button */
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.save-button:hover {
+  background-color: #1e7d4e; /* Slightly darker green */
 }
 
 /* Adjust color variables if necessary */
