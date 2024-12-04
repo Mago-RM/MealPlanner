@@ -1,13 +1,13 @@
 <template>
   <div class="recipes">
-    <h1 class="text-2xl font-bold">Recipes Page</h1>
+    <h1 class="text-2xl font-bold">Let's Go Grocery Shopping</h1>
     <p>Content for the Recipes page goes here.</p>
   </div>
 </template>
 
 <script>
 export default {
-  name: "RecipesView",
+  name: "ShoppingListView",
 };
 </script>
 

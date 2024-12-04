@@ -1,0 +1,25 @@
+{
+    "Monday": [
+      { "id": 1, "type": "Breakfast", "recipeName": "Pancakes" },
+      { "id": 2, "type": "Dinner", "recipeName": "Spaghetti" }
+    ],
+    "Tuesday": [
+      { "id": 3, "type": "Lunch", "recipeName": "Salad" }
+    ],
+    "Wednesday": [
+      { "id": 3, "type": "Lunch", "recipeName": "Salad" }
+    ],
+    "Thursday": [
+      { "id": 3, "type": "Lunch", "recipeName": "Salad" }
+    ],
+    "Friday": [
+      { "id": 3, "type": "Lunch", "recipeName": "Salad" }
+    ],
+    "Saturday": [
+      { "id": 3, "type": "Lunch", "recipeName": "Salad" }
+    ],
+    "Sunday": [
+      { "id": 3, "type": "Lunch", "recipeName": "Salad" }
+    ]
+}
+  
