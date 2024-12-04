@@ -9,21 +9,11 @@
   },
   {
     "name": "Wednesday",
-    "meals": [
-      {
-        "type": "Breakfast",
-        "recipe": "Pancakes"
-      }
-    ]
+    "meals": []
   },
   {
     "name": "Thursday",
-    "meals": [
-      {
-        "type": "Breakfast",
-        "recipe": "Pancakes"
-      }
-    ]
+    "meals": []
   },
   {
     "name": "Friday",

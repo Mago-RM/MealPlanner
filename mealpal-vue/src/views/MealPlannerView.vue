@@ -115,15 +115,26 @@ export default {
       });
     },
     saveToJSON() {
-      const blob = new Blob([JSON.stringify(this.weekDays, null, 2)], {
+      // Combine week plan and recipes for saving
+      const data = {
+        weekPlan: this.weekDays,
+        recipes: this.recipes,
+      };
+
+      // Create a JSON Blob and trigger download
+      const blob = new Blob([JSON.stringify(data, null, 2)], {
         type: "application/json",
       });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
       a.download = "week_plan.json";
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
       URL.revokeObjectURL(url);
+
+      console.log("JSON file saved successfully!");
     },
   },
 };
