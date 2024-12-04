@@ -115,26 +115,33 @@ export default {
       });
     },
     saveToJSON() {
-      // Combine week plan and recipes for saving
-      const data = {
-        weekPlan: this.weekDays,
-        recipes: this.recipes,
-      };
-
-      // Create a JSON Blob and trigger download
-      const blob = new Blob([JSON.stringify(data, null, 2)], {
+      // Save week plan
+      const weekPlanBlob = new Blob([JSON.stringify(this.weekDays, null, 2)], {
         type: "application/json",
       });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "week_plan.json";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      const weekPlanUrl = URL.createObjectURL(weekPlanBlob);
+      const weekPlanLink = document.createElement("a");
+      weekPlanLink.href = weekPlanUrl;
+      weekPlanLink.download = "week_plan.json";
+      document.body.appendChild(weekPlanLink);
+      weekPlanLink.click();
+      document.body.removeChild(weekPlanLink);
+      URL.revokeObjectURL(weekPlanUrl);
 
-      console.log("JSON file saved successfully!");
+      // Save recipes
+      const recipesBlob = new Blob([JSON.stringify(this.recipes, null, 2)], {
+        type: "application/json",
+      });
+      const recipesUrl = URL.createObjectURL(recipesBlob);
+      const recipesLink = document.createElement("a");
+      recipesLink.href = recipesUrl;
+      recipesLink.download = "recipes.json";
+      document.body.appendChild(recipesLink);
+      recipesLink.click();
+      document.body.removeChild(recipesLink);
+      URL.revokeObjectURL(recipesUrl);
+
+      console.log("Week plan and recipes JSON files saved successfully!");
     },
   },
 };
