@@ -4,6 +4,9 @@
       <!-- Meal Schedule Section -->
       <div class="meal-schedule">
         <h2 class="section-title">Your Meals This Week</h2>
+        <!-- Update Schedule Button -->
+        <button class="update-button" @click="fetchSchedule">Update Schedule</button>
+        <!-- Schedule Grid -->
         <div class="schedule-grid">
           <div v-for="day in weekDays" :key="day.name" class="schedule-column">
             <h3 class="day-name">{{ day.name }}</h3>
@@ -60,28 +63,40 @@ export default {
     };
   },
   async created() {
-    try {
-      // Fetch featured recipes
-      const responseRecipes = await fetch("/recipes.json");
-      if (responseRecipes.ok) {
-        this.recipes = await responseRecipes.json();
-      } else {
-        console.error("Failed to fetch recipes.");
-      }
+    await this.fetchData(); // Fetch data when the component is created
+  },
+  methods: {
+    async fetchData() {
+      try {
+        // Fetch featured recipes
+        const responseRecipes = await fetch("/recipes.json");
+        if (responseRecipes.ok) {
+          this.recipes = await responseRecipes.json();
+        } else {
+          console.error("Failed to fetch recipes.");
+        }
 
-      // Fetch weekly meal schedule
-      const responseSchedule = await fetch("/week_plan.json");
-      if (responseSchedule.ok) {
-        this.weekDays = await responseSchedule.json();
-      } else {
-        console.error("Failed to fetch week plan.");
+        // Fetch weekly meal schedule
+        const responseSchedule = await fetch("/week_plan.json");
+        if (responseSchedule.ok) {
+          this.weekDays = await responseSchedule.json();
+        } else {
+          console.error("Failed to fetch week plan.");
+        }
+
+        console.log("Data successfully updated.");
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+    },
+
+    async updateData() {
+      await this.fetchData(); // Re-fetch data when the update button is clicked
+    },
   },
 };
 </script>
+
 
 <style scoped>
 /* Colors */
@@ -113,6 +128,24 @@ export default {
   background-color: var(--beige);
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Update Schedule Button */
+.update-button {
+  display: block; /* Ensures the button is visible */
+  margin: 0 auto 1.5rem; /* Centers the button */
+  padding: 10px 20px; /* Adds padding for better size */
+  font-size: 1rem; /* Sets readable font size */
+  color: white; /* Text color */
+  background-color: var(--green); /* Green background */
+  border: none; /* Removes border */
+  border-radius: 5px; /* Rounds corners */
+  cursor: pointer; /* Changes cursor to pointer */
+  transition: background-color 0.3s; /* Smooth hover transition */
+}
+
+.update-button:hover {
+  background-color: #218838;
 }
 
 .schedule-grid {

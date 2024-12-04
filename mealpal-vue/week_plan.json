@@ -13,12 +13,7 @@
   },
   {
     "name": "Thursday",
-    "meals": [
-      {
-        "type": "Breakfast",
-        "recipe": "Tea"
-      }
-    ]
+    "meals": []
   },
   {
     "name": "Friday",
