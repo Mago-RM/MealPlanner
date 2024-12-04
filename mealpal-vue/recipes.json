@@ -193,7 +193,7 @@
         "instructions": "Scramble eggs and Add to a pan with oil. Move constantly. Add salt and pepper.",
         "category": "Breakfast",
         "servings": "1",
-        "picture": "assets/images/placeholder.jpg"
+        "picture": "assets/images/scramble.jpg"
     },
     {
         "name": "Iced Coffe",
@@ -222,7 +222,7 @@
         "instructions": "Mix coffe with Milk, ice and Sugar",
         "category": "Beverages",
         "servings": "1",
-        "picture": "assets/images/placeholder.jpg"
+        "picture": "assets/images/icedcoffee.jpg"
     },
     {
         "name": "Iced Tea",
@@ -246,6 +246,6 @@
         "instructions": "Brew tea following instructions.\nServe Tea and Add Ice\nAdd suggar if needed.",
         "category": "Beverages",
         "servings": "1",
-        "picture": "assets/images/placeholder.jpg"
+        "picture": "assets/images/icedtea.jpg"
     }
 ]

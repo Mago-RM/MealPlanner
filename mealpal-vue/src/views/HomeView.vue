@@ -3,7 +3,7 @@
     <div class="home">
       <!-- Meal Schedule Section -->
       <div class="meal-schedule">
-        <h2 class="section-title">Meal Schedule for the Week</h2>
+        <h2 class="section-title">Your Meals This Week</h2>
         <div class="schedule-grid">
           <div v-for="day in weekDays" :key="day.name" class="schedule-column">
             <h3 class="day-name">{{ day.name }}</h3>
