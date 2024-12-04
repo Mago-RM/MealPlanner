@@ -132,16 +132,18 @@ export default {
 
 /* Update Schedule Button */
 .update-button {
-  display: block; /* Ensures the button is visible */
-  margin: 0 auto 1.5rem; /* Centers the button */
-  padding: 10px 20px; /* Adds padding for better size */
-  font-size: 1rem; /* Sets readable font size */
-  color: white; /* Text color */
-  background-color: var(--green); /* Green background */
-  border: none; /* Removes border */
-  border-radius: 5px; /* Rounds corners */
-  cursor: pointer; /* Changes cursor to pointer */
-  transition: background-color 0.3s; /* Smooth hover transition */
+  display: inline-block; /* Ensures button dimensions are respected */
+  margin: 0 auto 1.5rem; /* Centers the button and adds spacing */
+  padding: 12px 25px; /* Adjust padding for a better appearance */
+  font-size: 1.1rem; /* Slightly larger font for visibility */
+  font-weight: bold; /* Makes text stand out */
+  color: #fff; /* Ensures contrast with the background */
+  background-color: #28a745 !important;
+  border: 1px solid #218838; /* Adds a subtle border */
+  border-radius: 8px; /* Smooth rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+  transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
 }
 
 .update-button:hover {
