@@ -72,6 +72,14 @@ export default {
     const response = await fetch("/recipes.json");
     this.recipes = await response.json();
   },
+  computed: {
+    // Filter recipes for a search bar or dropdown
+    filteredRecipes() {
+      return this.recipes.filter((recipe) =>
+        recipe.name.toLowerCase().includes(this.selectedRecipe.toLowerCase())
+      );
+    },
+  },
   watch: {
     weekDays: {
       deep: true,

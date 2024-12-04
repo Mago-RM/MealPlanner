@@ -15,7 +15,7 @@
           </div>
         </div>
       </div>
-
+      
       <!-- Featured Recipes Section -->
       <h2 class="section-title">Featured Recipes</h2>
       <div class="recipe-grid">
