@@ -17,7 +17,12 @@
   },
   {
     "name": "Friday",
-    "meals": []
+    "meals": [
+      {
+        "type": "Snacks",
+        "recipe": "Banana"
+      }
+    ]
   },
   {
     "name": "Saturday",

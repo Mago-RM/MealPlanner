@@ -5,7 +5,6 @@
 
     <!-- Search Bar, Filter, and Add Recipe -->
     <div class="actions">
-      <!-- Search Bar and Search Button -->
       <div class="search-wrapper">
         <input
           type="text"
@@ -13,12 +12,8 @@
           placeholder="Search for recipes..."
           class="search-bar"
         />
-        <button class="search-button" @click="handleSearch">
-          🔍 Search
-        </button>
+        <button class="search-button" @click="handleSearch">🔍 Search</button>
       </div>
-
-      <!-- Filter Dropdown -->
       <div class="filter-wrapper">
         <label for="category-filter" class="filter-label">Filter by Category:</label>
         <select
@@ -36,11 +31,49 @@
           </option>
         </select>
       </div>
-
-      <!-- Add Recipe Button -->
       <button class="add-recipe-button" @click="openAddRecipeModal">+ Add Recipe</button>
-  
-          <!-- Add Recipe Modal -->
+    </div>
+
+    <!-- Recipes Grid -->
+    <div class="recipe-grid">
+      <div
+        v-for="recipe in filteredRecipes"
+        :key="recipe.name"
+        class="recipe-card"
+        @click="confirmDelete(recipe)"
+      >
+        <img
+          :src="recipe.picture || '/assets/images/placeholder.jpg'"
+          :alt="recipe.name"
+          class="recipe-image"
+        />
+        <div class="recipe-content">
+          <h2 class="recipe-title">{{ recipe.name }}</h2>
+          <p class="recipe-info"><strong>Category:</strong> {{ recipe.category }}</p>
+          <h3 class="recipe-subtitle">Ingredients:</h3>
+          <ul class="ingredients-list">
+            <li v-for="(ingredient, index) in recipe.ingredients" :key="index">
+              {{ ingredient.quantity }} {{ ingredient.unit }} {{ ingredient.name }}
+            </li>
+          </ul>
+          <p class="recipe-instructions">{{ recipe.instructions }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div v-if="deleteModalOpen" class="modal-overlay">
+      <div class="modal">
+        <h2>Confirm Delete</h2>
+        <p>Are you sure you want to delete the recipe <strong>{{ recipeToDelete?.name }}</strong>?</p>
+        <div class="modal-actions">
+          <button class="cancel-button" @click="cancelDelete">Cancel</button>
+          <button class="save-button" @click="deleteRecipe">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Recipe Modal -->
     <div v-if="isModalOpen" class="modal-overlay">
       <div class="modal">
         <h2>Add New Recipe</h2>
@@ -52,43 +85,45 @@
           type="number"
           class="modal-input"
         />
-        <!-- Add Ingredients Section -->
-      <div class="ingredients-section">
-        <h4>Ingredients:</h4>
-        <div v-for="(ingredient, index) in newRecipe.ingredients" :key="index" class="ingredient-row">
-          <input
-            type="text"
-            v-model="ingredient.name"
-            placeholder="Ingredient Name"
-            class="ingredient-input"
-          />
-          <input
-            type="number"
-            v-model="ingredient.quantity"
-            placeholder="Quantity"
-            class="ingredient-input quantity"
-          />
-          <select v-model="ingredient.unit" class="ingredient-input unit">
-            <option value="">-- Unit --</option>
-            <option value="grams">grams</option>
-            <option value="ml">ml</option>
-            <option value="cups">cups</option>
-            <option value="tablespoons">tablespoons</option>
-            <option value="teaspoons">teaspoons</option>
-            <option value="pieces">pieces</option>
-          </select>
-          <button @click="removeIngredient(index)" class="remove-button">Remove</button>
+        <div class="ingredients-section">
+          <h4>Ingredients:</h4>
+          <div
+            v-for="(ingredient, index) in newRecipe.ingredients"
+            :key="index"
+            class="ingredient-row"
+          >
+            <input
+              type="text"
+              v-model="ingredient.name"
+              placeholder="Ingredient Name"
+              class="ingredient-input"
+            />
+            <input
+              type="number"
+              v-model="ingredient.quantity"
+              placeholder="Quantity"
+              class="ingredient-input quantity"
+            />
+            <select v-model="ingredient.unit" class="ingredient-input unit">
+              <option value="">-- Unit --</option>
+              <option value="grams">grams</option>
+              <option value="ml">ml</option>
+              <option value="cups">cups</option>
+              <option value="tablespoons">tablespoons</option>
+              <option value="teaspoons">teaspoons</option>
+              <option value="pieces">pieces</option>
+            </select>
+            <button @click="removeIngredient(index)" class="remove-button">Remove</button>
+          </div>
+          <button @click="addIngredient" class="add-ingredient-button">+ Add Ingredient</button>
         </div>
-        <button @click="addIngredient" class="add-ingredient-button">+ Add Ingredient</button>
-      </div>
-
         <textarea
           v-model="newRecipe.instructions"
           placeholder="Instructions"
           class="modal-input instructions-textarea"
         ></textarea>
 
-        <!-- Image Upload -->
+          <!-- Image Upload -->
         <div class="file-input-wrapper">
           <label for="picture-upload" class="file-label">Upload Picture:</label>
           <input
@@ -108,39 +143,9 @@
         </div>
       </div>
     </div>
-
-
-    <!-- Recipes Grid -->
-    <div class="recipe-grid">
-      <div v-for="recipe in filteredRecipes" :key="recipe.name" class="recipe-card">
-        <!-- Recipe Image -->
-        <img
-          :src="recipe.picture || '/assets/images/placeholder.jpg'"
-          :alt="recipe.name"
-          class="recipe-image"
-        />
-
-        <!-- Recipe Content -->
-        <div class="recipe-content">
-          <h2 class="recipe-title">{{ recipe.name }}</h2>
-          <p class="recipe-info">
-            <strong>Category:</strong> {{ recipe.category }}
-          </p>
-
-          <h3 class="recipe-subtitle">Ingredients:</h3>
-          <ul class="ingredients-list">
-            <li v-for="(ingredient, index) in recipe.ingredients" :key="index">
-              {{ ingredient.quantity }} {{ ingredient.unit }} {{ ingredient.name }}
-            </li>
-          </ul>
-
-          <p class="recipe-instructions">{{ recipe.instructions }}</p>
-        </div>
-      </div>
-    </div>
   </div>
-</div>
 </template>
+
 
 <script>
 export default {
@@ -158,6 +163,8 @@ export default {
         instructions: "",
         picture: null,
       },
+      deleteModalOpen: false,
+      recipeToDelete: null,
     };
   },
 
@@ -233,7 +240,20 @@ export default {
       // Close the modal and reset the new recipe
       this.closeModal();
     },
-
+    confirmDelete(recipe) {
+      console.log("Confirm delete for:", recipe.name);
+      this.recipeToDelete = recipe;
+      this.deleteModalOpen = true;
+    },
+    cancelDelete() {
+      this.recipeToDelete = null;
+      this.deleteModalOpen = false;
+    },
+    deleteRecipe() {
+      this.recipes = this.recipes.filter((recipe) => recipe !== this.recipeToDelete);
+      this.saveToJSON();
+      this.cancelDelete();
+    },
     saveToJSON() {
       const dataStr = JSON.stringify(this.recipes, null, 2);
       const blob = new Blob([dataStr], { type: "application/json" });
